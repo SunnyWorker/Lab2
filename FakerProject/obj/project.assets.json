@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Unik\\СПП\\Lab2\\Faker\\Faker.csproj",
-      "projectName": "Faker",
-      "projectPath": "D:\\Unik\\СПП\\Lab2\\Faker\\Faker.csproj",
+      "projectUniqueName": "D:\\Unik\\СПП\\Lab2\\FakerProject\\FakerProject.csproj",
+      "projectName": "FakerProject",
+      "projectPath": "D:\\Unik\\СПП\\Lab2\\FakerProject\\FakerProject.csproj",
       "packagesPath": "C:\\Users\\Asus\\.nuget\\packages\\",
-      "outputPath": "D:\\Unik\\СПП\\Lab2\\Faker\\obj\\",
+      "outputPath": "D:\\Unik\\СПП\\Lab2\\FakerProject\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Asus\\AppData\\Roaming\\NuGet\\NuGet.Config"

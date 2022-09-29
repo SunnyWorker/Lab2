@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Faker", "Faker\Faker.csproj", "{05CABF28-EE6E-4B27-8EB2-4E6A997B7544}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FakerProject", "FakerProject\FakerProject.csproj", "{05CABF28-EE6E-4B27-8EB2-4E6A997B7544}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
