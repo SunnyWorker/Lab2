@@ -5,6 +5,8 @@ public class Test
     public int a;
     public int b;
 
+    public InnerTest InnerTest;
+
     private Test(int a)
     {
         this.a = a;
@@ -12,6 +14,6 @@ public class Test
 
     public override string ToString()
     {
-        return a + " " + b + "\n";
+        return a + "\n" + b + "\n" + InnerTest + "\n";
     }
 }
