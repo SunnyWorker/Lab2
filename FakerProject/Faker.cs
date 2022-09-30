@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Runtime.CompilerServices;
 using Faker.generators;
 
@@ -21,6 +22,7 @@ public class Faker : IFaker
         Generators.Add(new ByteGenerator());
         Generators.Add(new ShortGenerator());
         Generators.Add(new StringGenerator());
+        Generators.Add(new ListGenerator());
         Generators.Add(new ObjectGenerator());
     }
 

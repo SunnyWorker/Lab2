@@ -1,3 +1,5 @@
+using System.Collections;
+
 namespace Faker.generators;
 
 public interface IValueGenerator

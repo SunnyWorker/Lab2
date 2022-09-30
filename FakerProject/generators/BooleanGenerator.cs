@@ -1,3 +1,5 @@
+using System.Collections;
+
 namespace Faker.generators;
 
 public class BooleanGenerator : IValueGenerator

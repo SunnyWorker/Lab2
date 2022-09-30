@@ -1,14 +1,25 @@
+using System.Collections;
+
 namespace Faker.generators;
 
 public class ListGenerator : IValueGenerator
 {
     public object? Generate(Type typeToGenerate, GeneratorContext context)
     {
-        return context.Random.Next(Byte.MinValue, Byte.MaxValue);
+        Type genericType = typeToGenerate.GetGenericArguments()[0]; //IList<Test> -> Test
+        int count = Math.Abs(context.Random.Next(10,50));
+        var resultList = (IList)Activator.CreateInstance(typeToGenerate);
+        for (int i = 0; i < 10; i++)
+        {
+            resultList.Add(context.Faker.GetGenerator(genericType).Generate(genericType,context));
+        }
+
+        return resultList;
     }
 
     public bool CanGenerate(Type type)
     {
-        return type == typeof(byte);
+        return type.GetInterfaces().Contains(typeof(IList));
     }
+    //typeof(List<Test>).GetWithNoGenerics == List
 }
