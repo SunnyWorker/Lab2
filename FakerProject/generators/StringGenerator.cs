@@ -9,7 +9,7 @@ public class StringGenerator : IValueGenerator
         char ch;
         for (int i = 0; i < size; i++)
         {
-            ch = (char) (Math.Abs(context.Faker.Create<char>()) % 255);
+            ch = (char) (Math.Abs((char)context.Faker.Create(typeof(char))) % 255);
             s += ch;
         }
 

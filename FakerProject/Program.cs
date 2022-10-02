@@ -13,6 +13,5 @@ var faker = new Faker.Faker(config);
 var i = faker.Create<Test>(); // 542
 Console.WriteLine(i);
 //TODO Cycle situation
-//TODO config +
 //TODO tests
 //TODO dynamic adding of generators

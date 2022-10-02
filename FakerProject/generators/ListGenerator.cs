@@ -11,7 +11,7 @@ public class ListGenerator : IValueGenerator
         var resultList = (IList)Activator.CreateInstance(typeToGenerate);
         for (int i = 0; i < 10; i++)
         {
-            resultList.Add(context.Faker.GetGenerator(genericType).Generate(genericType,context));
+            resultList.Add(context.Faker.Create(genericType));
         }
 
         return resultList;

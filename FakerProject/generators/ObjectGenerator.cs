@@ -23,8 +23,7 @@ public class ObjectGenerator : IValueGenerator
 
             foreach (var parameterInfo in chosenConstructor.GetParameters())
             {
-                var generator = context.Faker.GetGenerator(parameterInfo.ParameterType);
-                parameters.Add(generator.Generate(parameterInfo.ParameterType,context));
+                parameters.Add(context.Faker.Create(parameterInfo.ParameterType));
             }
 
             resultObject = chosenConstructor.Invoke(parameters.ToArray());
@@ -35,16 +34,14 @@ public class ObjectGenerator : IValueGenerator
         {
             if (property.GetValue(resultObject) != GetDefaultValue(property.PropertyType) && 
                 !property.GetValue(resultObject).Equals(GetDefaultValue(property.PropertyType))) continue;
-            var generator = context.Faker.GetGenerator(property.PropertyType); 
-            property.SetValue(resultObject,generator.Generate(property.PropertyType,context));
+            property.SetValue(resultObject,context.Faker.Create(property.PropertyType));
         }
         
         foreach (var field in typeToGenerate.GetFields())
         {
             if (field.GetValue(resultObject) != GetDefaultValue(field.FieldType) && 
                 !field.GetValue(resultObject).Equals(GetDefaultValue(field.FieldType))) continue;
-            var generator = context.Faker.GetGenerator(field.FieldType); 
-            field.SetValue(resultObject,generator.Generate(field.FieldType,context));
+            field.SetValue(resultObject,context.Faker.Create(field.FieldType));
         }
 
         return resultObject;

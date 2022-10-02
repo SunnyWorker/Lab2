@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using Faker.generators;
 
@@ -24,7 +25,7 @@ public class Faker : IFaker
         return GetGenerator(t).Generate(t,new GeneratorContext(new Random(),this));
     }
 
-    public IValueGenerator GetGenerator(Type t)
+    private IValueGenerator GetGenerator(Type t)
     {
         foreach (var generator in Generators)
         {
@@ -37,18 +38,14 @@ public class Faker : IFaker
 
     public Faker(FakerConfig config)
     {
+        Assembly assembly = Assembly.GetExecutingAssembly();
         this.config = config;
-        Generators = new List<IValueGenerator>();
-        Generators.Add(new IntegerGenerator());
-        Generators.Add(new BooleanGenerator());
-        Generators.Add(new LongGenerator());
-        Generators.Add(new CharGenerator());
-        Generators.Add(new DoubleGenerator());
-        Generators.Add(new FloatGenerator());
-        Generators.Add(new ByteGenerator());
-        Generators.Add(new ShortGenerator());
-        Generators.Add(new StringGenerator());
-        Generators.Add(new ListGenerator());
-        Generators.Add(new ObjectGenerator());
+        String path = "..\\..\\..\\generators";
+        Generators = new();
+        foreach (var file in Directory.GetFiles(path))
+        {
+            Generators.Add((IValueGenerator)assembly.CreateInstance("Faker.generators."+Path.GetFileNameWithoutExtension(file)));
+        }
+
     }
 }
