@@ -6,32 +6,20 @@ namespace Faker;
 
 public class Faker : IFaker
 {
+    private FakerConfig config; 
     private List<IValueGenerator> Generators
     {
         get;
     }
-    public Faker()
-    {
-        Generators = new List<IValueGenerator>();
-        Generators.Add(new IntegerGenerator());
-        Generators.Add(new BooleanGenerator());
-        Generators.Add(new LongGenerator());
-        Generators.Add(new CharGenerator());
-        Generators.Add(new DoubleGenerator());
-        Generators.Add(new FloatGenerator());
-        Generators.Add(new ByteGenerator());
-        Generators.Add(new ShortGenerator());
-        Generators.Add(new StringGenerator());
-        Generators.Add(new ListGenerator());
-        Generators.Add(new ObjectGenerator());
-    }
 
     public T Create<T>()
     {
-        return (T) Create(typeof(T));
+        var fakeObject = (T) Create(typeof(T));
+        config.Change<T>(fakeObject);
+        return fakeObject;
     }
 
-    private object? Create(Type t)
+    public object? Create(Type t)
     {
         return GetGenerator(t).Generate(t,new GeneratorContext(new Random(),this));
     }
@@ -45,12 +33,22 @@ public class Faker : IFaker
 
         return null;
     }
-    
-    
 
-    
-    
 
-    
-    
+    public Faker(FakerConfig config)
+    {
+        this.config = config;
+        Generators = new List<IValueGenerator>();
+        Generators.Add(new IntegerGenerator());
+        Generators.Add(new BooleanGenerator());
+        Generators.Add(new LongGenerator());
+        Generators.Add(new CharGenerator());
+        Generators.Add(new DoubleGenerator());
+        Generators.Add(new FloatGenerator());
+        Generators.Add(new ByteGenerator());
+        Generators.Add(new ShortGenerator());
+        Generators.Add(new StringGenerator());
+        Generators.Add(new ListGenerator());
+        Generators.Add(new ObjectGenerator());
+    }
 }

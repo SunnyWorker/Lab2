@@ -2,15 +2,17 @@
 
 
 using System.Threading.Channels;
+using Faker;
 using Faker.generators;
 using Faker.test_objects;
 
-var faker = new Faker.Faker();
+var config = new FakerConfig();
 IValueGenerator generator = new ListGenerator();
-//List<Test> tests = (List<Test>)generator.Generate<Test>(typeof(List<Test>),new GeneratorContext(new Random(),faker));
-var i = faker.Create<List<Test>>(); // 542
-foreach (var test in i)
-{
-    Console.WriteLine(test);
-}
+config.Add<Test, int, AGenerator>(test => test.a);
+var faker = new Faker.Faker(config);
+var i = faker.Create<Test>(); // 542
 Console.WriteLine(i);
+//TODO Cycle situation
+//TODO config +
+//TODO tests
+//TODO dynamic adding of generators

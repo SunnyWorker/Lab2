@@ -5,7 +5,7 @@ public class Test
     public int a;
     public int b;
 
-    public InnerTest InnerTest;
+    public int InnerTest;
 
     private Test(int a)
     {
