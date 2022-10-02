@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Linq.Expressions;
 using System.Reflection;
 using Faker.generators;
@@ -25,7 +26,7 @@ public class FakerConfig
         FieldDictionary = new Dictionary<Type, Dictionary<string, IValueGenerator>>();
     }
 
-    public void Change<F>(F f)
+    public void Change<F>(F f, IFaker faker, ConcurrentDictionary<Type, int> CycleControl)
     {
         var typeDictionary = FieldDictionary.GetValueOrDefault(typeof(F), new());
         var fields = typeof(F).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
@@ -35,7 +36,7 @@ public class FakerConfig
             var generator = typeDictionary.GetValueOrDefault(field.Name, null);
             if(generator!=null && generator.CanGenerate(field.FieldType))
             {
-                field.SetValue(f,generator.Generate(f.GetType(),new (new Random(),new Faker(this))));
+                field.SetValue(f,generator.Generate(f.GetType(),new (CycleControl,new Random(),faker)));
             }
         }
         
@@ -44,7 +45,7 @@ public class FakerConfig
             var generator = typeDictionary.GetValueOrDefault(property.Name, null);
             if(generator!=null && generator.CanGenerate(property.PropertyType))
             {
-                property.SetValue(f,generator.Generate(f.GetType(),new (new Random(),new Faker(this))));
+                property.SetValue(f,generator.Generate(f.GetType(),new (CycleControl,new Random(),faker)));
             }
         }
     }

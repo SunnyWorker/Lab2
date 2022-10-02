@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Faker.generators;
@@ -7,7 +8,8 @@ namespace Faker;
 
 public class Faker : IFaker
 {
-    private FakerConfig config; 
+    private FakerConfig config;
+    private ConcurrentDictionary<Type, int> CycleControl = new();
     private List<IValueGenerator> Generators
     {
         get;
@@ -15,14 +17,15 @@ public class Faker : IFaker
 
     public T Create<T>()
     {
+        CycleControl.Clear();
         var fakeObject = (T) Create(typeof(T));
-        config.Change<T>(fakeObject);
+        config.Change<T>(fakeObject,this,CycleControl);
         return fakeObject;
     }
 
     public object? Create(Type t)
     {
-        return GetGenerator(t).Generate(t,new GeneratorContext(new Random(),this));
+        return GetGenerator(t).Generate(t,new GeneratorContext(CycleControl, new Random(),this));
     }
 
     private IValueGenerator GetGenerator(Type t)
@@ -38,10 +41,11 @@ public class Faker : IFaker
 
     public Faker(FakerConfig config)
     {
-        Assembly assembly = Assembly.GetExecutingAssembly();
-        this.config = config;
-        String path = "..\\..\\..\\generators";
         Generators = new();
+        CycleControl = new();
+        this.config = config;
+        Assembly assembly = Assembly.GetExecutingAssembly();
+        String path = "..\\..\\..\\generators";
         foreach (var file in Directory.GetFiles(path))
         {
             Generators.Add((IValueGenerator)assembly.CreateInstance("Faker.generators."+Path.GetFileNameWithoutExtension(file)));

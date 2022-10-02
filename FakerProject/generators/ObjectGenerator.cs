@@ -8,6 +8,12 @@ public class ObjectGenerator : IValueGenerator
 
     public object? Generate(Type typeToGenerate, GeneratorContext context)
     {
+        if (context.CycleControl.ContainsKey(typeToGenerate))
+        {
+            if (context.CycleControl[typeToGenerate] >= 2) return null;
+            context.CycleControl.AddOrUpdate(typeToGenerate,context.CycleControl[typeToGenerate],((type, i) => i+1));
+        }
+        else context.CycleControl.TryAdd(typeToGenerate,1);
         ConstructorInfo[] constructorInfos =
             typeToGenerate.GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
         List<object?> parameters = new List<object?>();
@@ -43,7 +49,6 @@ public class ObjectGenerator : IValueGenerator
                 !field.GetValue(resultObject).Equals(GetDefaultValue(field.FieldType))) continue;
             field.SetValue(resultObject,context.Faker.Create(field.FieldType));
         }
-
         return resultObject;
 
     }
