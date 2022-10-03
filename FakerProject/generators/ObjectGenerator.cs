@@ -67,7 +67,7 @@ public class ObjectGenerator : IValueGenerator
 
     public bool CanGenerate(Type type)
     {
-        return !type.IsPrimitive && !type.GetInterfaces().Contains(typeof(IList)) && type!=typeof(string);
+        return !type.IsPrimitive && !type.GetInterfaces().Contains(typeof(IList)) && type!=typeof(string) && type!=typeof(DateTime);
     }
     
 
