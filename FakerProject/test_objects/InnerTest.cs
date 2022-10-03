@@ -1,6 +1,6 @@
 namespace Faker.test_objects;
 
-public class InnerTest
+public struct InnerTest
 {
     public string randomString;
     public override string ToString()

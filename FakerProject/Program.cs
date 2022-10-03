@@ -8,7 +8,7 @@ using Faker.test_objects;
 
 var config = new FakerConfig();
 var faker = new Faker.Faker(config);
-config.Add<Test,int,AGenerator>(test => test.b);
+config.Add<Test,int,BGenerator>(test => test.b);
 var i = faker.Create<Test>(); // 542
 Console.WriteLine(i);
 //TODO find solving for config

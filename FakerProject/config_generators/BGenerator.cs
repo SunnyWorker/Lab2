@@ -1,6 +1,6 @@
 namespace Faker.generators;
 
-public class AGenerator : IValueGenerator
+public class BGenerator : IValueGenerator
 {
     public object? Generate(Type typeToGenerate, GeneratorContext context)
     {
