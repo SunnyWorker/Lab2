@@ -7,8 +7,8 @@ using Faker.generators;
 using Faker.test_objects;
 
 var config = new FakerConfig();
-config.Add<Test, int, AGenerator>(test => test.a);
 var faker = new Faker.Faker(config);
-var i = faker.Create<A>(); // 542
+config.Add<Test,int,AGenerator>(test => test.b);
+var i = faker.Create<Test>(); // 542
 Console.WriteLine(i);
-//TODO tests
+//TODO find solving for config

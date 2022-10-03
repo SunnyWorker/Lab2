@@ -2,14 +2,21 @@ namespace Faker.test_objects;
 
 public class Test
 {
-    public int a;
-    public int b;
-
-    public int InnerTest;
-
-    private Test(int a)
+    private int a;
+    public int b
     {
-        this.a = a;
+        get;
+    }
+
+    public InnerTest InnerTest
+    {
+        get;
+        set;
+    }
+
+    public Test(int b)
+    {
+        this.b = b;
     }
 
     public override string ToString()

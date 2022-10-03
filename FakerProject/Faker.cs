@@ -8,7 +8,7 @@ namespace Faker;
 
 public class Faker : IFaker
 {
-    private FakerConfig config;
+    public FakerConfig config;
     private ConcurrentDictionary<Type, int> CycleControl = new();
     private List<IValueGenerator> Generators
     {
@@ -19,7 +19,7 @@ public class Faker : IFaker
     {
         CycleControl.Clear();
         var fakeObject = (T) Create(typeof(T));
-        config.Change<T>(fakeObject,this,CycleControl);
+        //config.Change<T>(fakeObject,this,CycleControl);
         return fakeObject;
     }
 
@@ -38,6 +38,12 @@ public class Faker : IFaker
         return null;
     }
 
+    public object GetDefaultValue(Type t)
+    {
+        if (t.IsValueType)
+            return Activator.CreateInstance(t);
+        return null;
+    }
 
     public Faker(FakerConfig config)
     {
@@ -45,7 +51,7 @@ public class Faker : IFaker
         CycleControl = new();
         this.config = config;
         Assembly assembly = Assembly.GetExecutingAssembly();
-        String path = "..\\..\\..\\generators";
+        String path = "..\\..\\..\\..\\FakerProject\\generators";
         foreach (var file in Directory.GetFiles(path))
         {
             Generators.Add((IValueGenerator)assembly.CreateInstance("Faker.generators."+Path.GetFileNameWithoutExtension(file)));

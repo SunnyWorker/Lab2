@@ -7,7 +7,7 @@ public class ListGenerator : IValueGenerator
     public object? Generate(Type typeToGenerate, GeneratorContext context)
     {
         Type genericType = typeToGenerate.GetGenericArguments()[0]; //IList<Test> -> Test
-        int count = Math.Abs(context.Random.Next(10,50));
+        int count = Math.Abs(context.Random.Next(5,20));
         var resultList = (IList)Activator.CreateInstance(typeToGenerate);
         for (int i = 0; i < 10; i++)
         {

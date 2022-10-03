@@ -14,6 +14,7 @@ public class ObjectGenerator : IValueGenerator
             context.CycleControl.AddOrUpdate(typeToGenerate,context.CycleControl[typeToGenerate],((type, i) => i+1));
         }
         else context.CycleControl.TryAdd(typeToGenerate,1);
+        var configDictionary = context.Faker.config.GetTypeConfig(typeToGenerate);
         ConstructorInfo[] constructorInfos =
             typeToGenerate.GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
         List<object?> parameters = new List<object?>();
@@ -26,10 +27,10 @@ public class ObjectGenerator : IValueGenerator
                 if (vConstructorInfo.GetParameters().Length > chosenConstructor.GetParameters().Length) 
                     chosenConstructor = vConstructorInfo;
             }
-
             foreach (var parameterInfo in chosenConstructor.GetParameters())
             {
-                parameters.Add(context.Faker.Create(parameterInfo.ParameterType));
+                if(configDictionary.ContainsKey(parameterInfo.Name)) parameters.Add(configDictionary[parameterInfo.Name].Generate(parameterInfo.ParameterType,context));
+                else parameters.Add(context.Faker.Create(parameterInfo.ParameterType));
             }
 
             resultObject = chosenConstructor.Invoke(parameters.ToArray());
@@ -38,15 +39,26 @@ public class ObjectGenerator : IValueGenerator
 
         foreach (var property in typeToGenerate.GetProperties())
         {
-            if (property.GetValue(resultObject) != GetDefaultValue(property.PropertyType) && 
-                !property.GetValue(resultObject).Equals(GetDefaultValue(property.PropertyType))) continue;
+            
+            if (property.GetValue(resultObject) != context.Faker.GetDefaultValue(property.PropertyType) && 
+                !property.GetValue(resultObject).Equals(context.Faker.GetDefaultValue(property.PropertyType))) continue;
+            if (configDictionary.ContainsKey(property.Name))
+            {
+                property.SetValue(resultObject,configDictionary[property.Name].Generate(property.PropertyType,context));
+                continue;
+            }
             property.SetValue(resultObject,context.Faker.Create(property.PropertyType));
         }
         
         foreach (var field in typeToGenerate.GetFields())
         {
-            if (field.GetValue(resultObject) != GetDefaultValue(field.FieldType) && 
-                !field.GetValue(resultObject).Equals(GetDefaultValue(field.FieldType))) continue;
+            if (field.GetValue(resultObject) != context.Faker.GetDefaultValue(field.FieldType) && 
+                !field.GetValue(resultObject).Equals(context.Faker.GetDefaultValue(field.FieldType))) continue;
+            if (configDictionary.ContainsKey(field.Name))
+            {
+                field.SetValue(resultObject,configDictionary[field.Name].Generate(field.FieldType,context));
+                continue;
+            }
             field.SetValue(resultObject,context.Faker.Create(field.FieldType));
         }
         return resultObject;
@@ -55,13 +67,8 @@ public class ObjectGenerator : IValueGenerator
 
     public bool CanGenerate(Type type)
     {
-        return true;
+        return !type.IsPrimitive && !type.GetInterfaces().Contains(typeof(IList)) && type!=typeof(string);
     }
     
-    private object GetDefaultValue(Type t)
-    {
-        if (t.IsValueType)
-            return Activator.CreateInstance(t);
-        return null;
-    }
+
 }

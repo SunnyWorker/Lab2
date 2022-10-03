@@ -4,7 +4,7 @@ public class StringGenerator : IValueGenerator
 {
     public object? Generate(Type typeToGenerate, GeneratorContext context)
     {
-        int size = 100;
+        int size = context.Random.Next(10,50);
         string? s = "";
         char ch;
         for (int i = 0; i < size; i++)
